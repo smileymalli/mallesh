@@ -1,0 +1,14 @@
+---
+ - hosts: webserver
+   user: test
+   become: yes
+   connection: ssh
+   tasks: 
+      - name: installing ftp package
+        yum: name=vsftpd state=installed
+      - name: copying index.html
+        copy: src=index.html dest=/var/www/html/index.html
+        notify: service vsftpd restarted
+   handlers:
+      - name: service vsftpd restarted
+        service: name=vsftpd state=restarted
